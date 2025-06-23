@@ -1,4 +1,5 @@
 from django.db import models
+from village.models import Village
 
 # Create your models here.
 class Farmer(models.Model):

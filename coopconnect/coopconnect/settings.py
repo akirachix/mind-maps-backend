@@ -39,7 +39,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'trainings',
     'schedules',
-
+    'village',
+    'extension',
+    'attendance',
+    'cooperativeadmin',
+    'farmer',
+    'payment',
+    'rewards',
 ]
 
 MIDDLEWARE = [
