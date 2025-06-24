@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'farmer',
     'payment',
     'rewards',
+    'refunds',
 ]
 
 MIDDLEWARE = [
