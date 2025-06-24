@@ -37,12 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
- feature/admin-extension-farmer
     'cooperativeadmin',
     'farmer',
     'extension',
-
-
+    'refunds',
 ]
 
 MIDDLEWARE = [
