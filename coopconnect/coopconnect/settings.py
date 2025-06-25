@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'payment',
     'rewards',
     'refunds',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
