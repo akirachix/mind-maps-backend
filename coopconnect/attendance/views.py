@@ -1,6 +1,4 @@
 from django.shortcuts import render
-
-# Create your views here.
 from rest_framework import viewsets
 from attendance.models import Attendance
 from .serializers import AttendanceSerializer
