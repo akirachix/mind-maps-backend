@@ -1,4 +1,10 @@
 from django.db import models
+from  farmer.models import Farmer
+from  attendance.models import Attendance
+
+
+
+
 
 # Create your models here.
 class Rewards(models.Model):

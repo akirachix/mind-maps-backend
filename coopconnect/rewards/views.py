@@ -1,3 +1,7 @@
-from django.shortcuts import render
+# from rest_framework.generics import ListCreateAPIView
+# from .models import Rewards
+# from .serializers import RewardsSerializer
 
-# Create your views here.
+# class RewardsListCreateAPIView(ListCreateAPIView):
+#     queryset = Rewards.objects.all()
+#     serializer_class = RewardsSerializer

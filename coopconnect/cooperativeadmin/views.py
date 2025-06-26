@@ -1,3 +1,7 @@
-from django.shortcuts import render
+# from rest_framework.generics import ListCreateAPIView
+# from .models import Admin
+# from .serializers import CooperativeAdminSerializer
 
-# Create your views here.
+# class AdminListCreateAPIView(ListCreateAPIView):
+#     queryset = Admin.objects.all()
+#     serializer_class = CooperativeAdminSerializer

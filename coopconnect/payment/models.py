@@ -1,5 +1,6 @@
 from django.db import models
-
+from farmer.models import Farmer
+from schedules.models import Schedules
 # Create your models here.
 
 class Payment(models.Model):
