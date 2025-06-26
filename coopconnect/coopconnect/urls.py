@@ -24,5 +24,6 @@ urlpatterns = [
     path('refunds/',include("refunds.urls")),
     path('trainings/',include("trainings.urls")),
     path('schedules/',include("schedules.urls")),
+    path('rewards/',include("rewards.urls")),
 
 ]

@@ -8,13 +8,13 @@ from schedules.models import Schedules
 from trainings.models import Trainings
 from village.models import Village
 from extension.models import ExtensionWorker
-from django.contrib.auth.models import User  # If your ExtensionWorker needs a User
+from django.contrib.auth.models import User  
 class SchedulesAPITestCase(APITestCase):
     def setUp(self):
-        # Create related model instances
-        self.training = Trainings.objects.create(title="Soil Health", description="Improving soil quality")
-        self.village = Village.objects.create(name="Kijiji")
-        self.extensionworker = ExtensionWorker.objects.create(name="Jane Doe")  # Add any required fields
+
+        self.training = Trainings.objects.create(topic="Soil Health", description="Improving soil quality",amount=100.0)
+        self.village = Village.objects.create(village_name="Kijiji",longitude=0.0 ,latitude=0.0)
+        self.extensionworker = ExtensionWorker.objects.create(name="Jane Doe",  village_id=self.village )  
         self.schedule = Schedules.objects.create(
             training=self.training,
             village=self.village,
@@ -22,6 +22,8 @@ class SchedulesAPITestCase(APITestCase):
             extensionworker=self.extensionworker
         )
         self.list_url = reverse('schedules-list')
+
+        
     def test_list_schedules(self):
         response = self.client.get(self.list_url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)

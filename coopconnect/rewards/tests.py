@@ -1,3 +1,99 @@
-from django.test import TestCase
+from django.urls import reverse
+from rest_framework import status
+from rest_framework.test import APITestCase
+from rewards.models import Rewards
+from attendance.models import Attendance
+from farmer.models import Farmer
+from schedules.models import Schedules
+from trainings.models import Trainings
+from village.models import Village
+from extension.models import ExtensionWorker
+from datetime import date
 
-# Create your tests here.
+class RewardsAPITestCase(APITestCase):
+    def setUp(self):
+        # Create Village
+        self.village = Village.objects.create(
+            village_name="Test Village",
+            longitude=34.00,
+            latitude=-6.00
+        )
+        # Create Farmer
+        self.farmer = Farmer.objects.create(
+            full_name="Test Farmer",
+            phone_number="0712345678",
+            village_id=self.village,
+            password="testpass"
+        )
+        # Create Trainings
+        self.training = Trainings.objects.create(
+            topic="Test Topic",
+            description="Test Description",
+            amount=50.00
+        )
+        # Create ExtensionWorker with all required fields
+        self.extensionworker = ExtensionWorker.objects.create(
+            name="Test EW",
+            village_id=self.village,
+            phone_number="0711111111",
+            password="extpass123",
+            email="testew@example.com"
+        )
+        # Create Schedules
+        self.schedule = Schedules.objects.create(
+            training=self.training,
+            village=self.village,
+            date=date.today(),
+            extensionworker=self.extensionworker
+        )
+        # Create Attendance
+        self.attendance = Attendance.objects.create(
+            farmer=self.farmer,
+            schedule=self.schedule,
+            village=self.village
+        )
+        # Create Rewards
+        self.reward = Rewards.objects.create(
+            farmer_id=self.farmer,
+            attendance_id=self.attendance,
+            farmer_points=100
+        )
+        self.list_url = reverse('rewards-list')
+        self.detail_url = reverse('rewards-detail', args=[self.reward.id])
+
+    def test_list_rewards(self):
+        response = self.client.get(self.list_url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIsInstance(response.data, list)
+        self.assertGreaterEqual(len(response.data), 1)
+
+    def test_retrieve_reward(self):
+        response = self.client.get(self.detail_url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['id'], self.reward.id)
+
+    def test_create_reward(self):
+        data = {
+            "farmer_id": self.farmer.id,
+            "attendance_id": self.attendance.id,
+            "farmer_points": 50
+        }
+        response = self.client.post(self.list_url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Rewards.objects.count(), 2)
+
+    def test_update_reward(self):
+        data = {
+            "farmer_id": self.farmer.id,
+            "attendance_id": self.attendance.id,
+            "farmer_points": 200
+        }
+        response = self.client.put(self.detail_url, data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.reward.refresh_from_db()
+        self.assertEqual(self.reward.farmer_points, 200)
+
+    def test_delete_reward(self):
+        response = self.client.delete(self.detail_url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertFalse(Rewards.objects.filter(id=self.reward.id).exists())

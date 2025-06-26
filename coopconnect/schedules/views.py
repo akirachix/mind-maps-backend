@@ -7,3 +7,4 @@ class SchedulesViewSet(viewsets.ModelViewSet):
     queryset = Schedules.objects.all()
     serializer_class = SchedulesSerializer
 
+

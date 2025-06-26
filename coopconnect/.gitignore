@@ -1,28 +1,6 @@
-<<<<<<< HEAD
-env/
-__pycache__/
-*.pyc
-db.sqlite3
-=======
-db.sqlite3
-__pycache__/
-<<<<<<<< HEAD:coopconnect/.gitignore
-*.pyc
-*.pyo
-*.pyd
-env/
-========
-__pycache__/
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
 *.py[cod]
 env/
-
-
-
-
-
->>>>>>>> 637313f7c580ebaf2fada4e6a490309d0853c26b:coopconnect/coopconnect/.gitignore
->>>>>>> 637313f7c580ebaf2fada4e6a490309d0853c26b
