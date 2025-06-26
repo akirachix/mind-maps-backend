@@ -48,7 +48,6 @@ INSTALLED_APPS = [
     'rewards',
     'rest_framework',
     'refunds',
-   'rest_framework',
     
 ]
 
