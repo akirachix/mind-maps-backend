@@ -1,7 +1,10 @@
 from django.shortcuts import render
 
 # Create your views here.
-from django.http import HttpResponse
+from rest_framework import viewsets
+from farmer.models import Farmer
+from .serializers import FarmerSerializer
 
-def farmer_home(request):
-    return HttpResponse("Welcome to the Farmer Page!")
+class FarmerViewSet(viewsets.ModelViewSet):
+    queryset = Farmer.objects.all()
+    serializer_class = FarmerSerializer

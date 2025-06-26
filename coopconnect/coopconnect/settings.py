@@ -42,12 +42,13 @@ INSTALLED_APPS = [
     'village',
     'extension',
     'attendance',
-    'cooperativeadmin',
+    'users',
     'farmer',
     'payment',
     'rewards',
     'refunds',
     'rest_framework',
+    'cooperativeadmin',
 ]
 
 MIDDLEWARE = [
