@@ -4,3 +4,7 @@ __pycache__/
 *.pyd
 *.py[cod]
 env/
+<<<<<<< HEAD
+=======
+attendance/serializers.py
+>>>>>>> 2ea60b0175f883af40655befc58dc6604eda3160
