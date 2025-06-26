@@ -3,8 +3,8 @@
 # Create your views here.
 from rest_framework import viewsets
 from .models import *
-from .serializers import AdminSerializer
+from .serializers import UserSerializer
 
-class AdminViewSet(viewsets.ModelViewSet):
-    queryset = Admin.objects.all()
-    serializer_class = AdminSerializer
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
