@@ -12,26 +12,26 @@ from datetime import date
 
 class RewardsAPITestCase(APITestCase):
     def setUp(self):
-        # Create Village
+        
         self.village = Village.objects.create(
             village_name="Test Village",
             longitude=34.00,
             latitude=-6.00
         )
-        # Create Farmer
+        
         self.farmer = Farmer.objects.create(
             full_name="Test Farmer",
             phone_number="0712345678",
             village_id=self.village,
             password="testpass"
         )
-        # Create Trainings
+        
         self.training = Trainings.objects.create(
             topic="Test Topic",
             description="Test Description",
             amount=50.00
         )
-        # Create ExtensionWorker with all required fields
+        
         self.extensionworker = ExtensionWorker.objects.create(
             name="Test EW",
             village_id=self.village,
@@ -39,20 +39,20 @@ class RewardsAPITestCase(APITestCase):
             password="extpass123",
             email="testew@example.com"
         )
-        # Create Schedules
+       
         self.schedule = Schedules.objects.create(
             training=self.training,
             village=self.village,
             date=date.today(),
             extensionworker=self.extensionworker
         )
-        # Create Attendance
+        
         self.attendance = Attendance.objects.create(
             farmer=self.farmer,
             schedule=self.schedule,
             village=self.village
         )
-        # Create Rewards
+        
         self.reward = Rewards.objects.create(
             farmer_id=self.farmer,
             attendance_id=self.attendance,
