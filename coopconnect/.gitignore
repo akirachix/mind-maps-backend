@@ -19,3 +19,10 @@ rewards/__pycache__
 schedules/__pycache__ 
 trainings/__pycache__ 
 village/__pycache__ 
+
+
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.py[cod]
