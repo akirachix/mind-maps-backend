@@ -4,5 +4,5 @@ class Village(models.Model):
     longtitude  = models.FloatField()
     latitude = models.FloatField()
     def __str__(self):
-        return self.name
+        return self.village_name
 # Create your models here.
