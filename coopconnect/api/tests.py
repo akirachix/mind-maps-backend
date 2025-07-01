@@ -1,5 +1,4 @@
 from django.test import TestCase
-# api/tests.py
 from django.urls import reverse
 from rest_framework.test import APITestCase
 from rest_framework import status
@@ -81,4 +80,4 @@ class UserAPITests(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(User.objects.count(), 0)
-# Create your tests here.
+
