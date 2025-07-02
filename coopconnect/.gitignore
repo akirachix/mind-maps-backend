@@ -4,14 +4,3 @@ __pycache__/
 *.pyd
 *.py[cod]
 env/
-attendance/serializers.py
-api/__pycache__ 
-attendance/__pycache__ 
-coopconnect/__pycache__ 
-cooperativeadmin/__pycache__ 
-env/__pycache__ 
-extension/__pycache__ 
-farmer/__pycache__ 
-payment/__pycache__ 
-refunds/__pycache__
-village/__pycache__ 
