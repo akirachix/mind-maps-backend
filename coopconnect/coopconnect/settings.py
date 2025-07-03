@@ -47,15 +47,7 @@ INSTALLED_APPS = [
     'payment',
     'rewards',
     'refunds',
-<<<<<<< HEAD
-    'rest_framework',
-    'cooperativeadmin',
-=======
-   'rest_framework',
-    
->>>>>>> develop
 ]
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
