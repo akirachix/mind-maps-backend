@@ -49,6 +49,8 @@ INSTALLED_APPS = [
     'refunds',
     'rest_framework',
     'api',
+   'rest_framework',
+    
 ]
 
 MIDDLEWARE = [

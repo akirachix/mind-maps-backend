@@ -2,27 +2,5 @@ env/
 __pycache__/
 *.pyc
 db.sqlite3
-env/
-_ ../et --hard HEAD~1__/
-_ ../tatus__/
-db api/__pycache__ 
-api/__pycache__ 
-attendance/__pycache__ 
-coopconnect/__pycache__ 
-cooperativeadmin/__pycache__ 
-env/__pycache__ 
-extension/__pycache__ 
-farmer/__pycache__ 
-payment/__pycache__ 
-refunds/__pycache__ 
-rewards/__pycache__ 
-schedules/__pycache__ 
-trainings/__pycache__ 
-village/__pycache__ 
-
-
-__pycache__/
 *.pyc
-*.pyo
-*.pyd
-*.py[cod]
+__pycache__/
