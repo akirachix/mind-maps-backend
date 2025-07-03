@@ -97,3 +97,8 @@ class RewardsAPITestCase(APITestCase):
         response = self.client.delete(self.detail_url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertFalse(Rewards.objects.filter(id=self.reward.id).exists())
+
+
+
+
+        
