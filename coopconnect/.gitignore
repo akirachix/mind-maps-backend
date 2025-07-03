@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # Ignore Python cache files
 __pycache__/
 *.py[cod]
@@ -24,11 +24,10 @@ db.sqlite3
 .idea/
 # Ignore Python compiled files
 *.pyc
-=======
 env/
 __pycache__/
 *.pyc
 db.sqlite3
 *.pyc
 __pycache__/
->>>>>>> develop
+
