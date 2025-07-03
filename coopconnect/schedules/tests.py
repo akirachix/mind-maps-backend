@@ -17,8 +17,7 @@ class SchedulesAPITestCase(APITestCase):
         )
         self.village = Village.objects.create(
             village_name="MyVillage",
-            longitude=1.0,
-            latitude=2.0
+            village_cell= "VillageOne"
         )
         self.worker = ExtensionWorker.objects.create(
             name="John Doe",
