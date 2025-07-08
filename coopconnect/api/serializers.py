@@ -1,21 +1,11 @@
-from rest_framework import serializers 
-
-from payment.models import Payment
-
-from village.models import Village
 
 
 
-class PaymentSerializer(serializers.ModelSerializer):
+from rest_framework import serializers
+from users.models import User
+
+
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Payment
+        model = User
         fields = '__all__'
-
-
-
-
-class VillageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Village
-        fields = '__all__'
-        
