@@ -37,7 +37,7 @@ class MomoAPI:
 
         payload = {
             "amount": str(amount),
-            "currency": "EUR", 
+            "currency": " ", 
             "externalId": external_id,
             "payer": {
                 "partyIdType": "MSISDN",
