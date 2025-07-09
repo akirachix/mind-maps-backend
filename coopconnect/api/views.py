@@ -2,7 +2,10 @@
 # Create your views here.
 from django.shortcuts import render
 from rest_framework import viewsets
-from .models import Trainings,Rewards,Schedules,Village
+from trainings.models import Trainings
+from rewards.models import Rewards
+from schedules.models import Schedules
+from village.models import Village
 from .serializers import TrainingsSerializer,SchedulesSerializer,RewardsSerializer,VillageSerializer
 
 class TrainingsViewSet(viewsets.ModelViewSet):
