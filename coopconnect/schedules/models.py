@@ -11,8 +11,8 @@ class Schedules(models.Model):
     
     def __str__(self):
 
-        return f"{self.topic} ({self.date})"
-
+        return f"{self.date}"
+        
 from django.db import models
 class Trainings(models.Model):
     topic = models.TextField(max_length=100)
@@ -22,5 +22,6 @@ class Trainings(models.Model):
     
     def __str__  (self):
 
-      return f"{self.date}"
+      return f"{self.topic} ({self.date})"
+
 
