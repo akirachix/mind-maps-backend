@@ -49,12 +49,16 @@ INSTALLED_APPS = [
     'village',
     'extension',
     'attendance',
-    'users',
+    'cooperativeadmin',
     'farmer',
     'payment',
     'rewards',
+    'rest_framework',
     'refunds',
+    'api',
+    
 ]
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
