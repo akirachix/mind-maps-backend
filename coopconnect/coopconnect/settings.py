@@ -10,6 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import os
+
+MOMOSUBSCRIPTION_KEY = os.getenv("MOMO_SUBSCRIPTION_KEY")
+MOMOAPI_USER = os.getenv("MOMO_API_USER")
+MOMOAPI_KEY = os.getenv("MOMO_API_KEY")
+
+
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -42,12 +49,16 @@ INSTALLED_APPS = [
     'village',
     'extension',
     'attendance',
-    'users',
+    'cooperativeadmin',
     'farmer',
     'payment',
     'rewards',
+    'rest_framework',
     'refunds',
+    'api',
+    
 ]
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

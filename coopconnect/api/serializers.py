@@ -1,11 +1,25 @@
-
-
-
 from rest_framework import serializers
-from users.models import User
+from trainings.models import Trainings
+from schedules.models import Schedules
+from rewards.models import Rewards
+from village.models import Village
 
-
-class UserSerializer(serializers.ModelSerializer):
+class TrainingsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = Trainings
+        fields = "__all__"
+
+class SchedulesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Schedules
+        fields = "__all__"
+
+class  RewardsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Rewards
         fields = '__all__'
+
+class  VillageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Village
+        fields = '__all__'        
