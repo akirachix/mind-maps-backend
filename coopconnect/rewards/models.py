@@ -8,3 +8,5 @@ class Rewards(models.Model):
     attendance_id = models.ForeignKey('attendance.Attendance', on_delete=models.CASCADE)
     farmer_points = models.PositiveIntegerField()
     last_updated = models.DateTimeField(auto_now=True)
+
+    
