@@ -44,20 +44,25 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'trainings',
-    'schedules',
-    'village',
-    'extension',
-    'attendance',
-    'cooperativeadmin',
-    'farmer',
-    'payment',
-    'rewards',
+
+    # Your applications
+    'users.apps.UsersConfig', # It's good practice to use the AppConfig
+    'trainings.apps.TrainingsConfig',
+    'schedules.apps.SchedulesConfig',
+    'village.apps.VillageConfig',
+    'attendance.apps.AttendanceConfig',
+    'payment.apps.PaymentConfig',
+    'rewards.apps.RewardsConfig',
+    'refunds.apps.RefundsConfig',
+    'api.apps.ApiConfig', # Assuming api is an app with an apps.py
+
+    # Third-party apps
     'rest_framework',
-    'refunds',
-    'api',
-    
+    'rest_framework_simplejwt',
 ]
+
+# Custom User Model Configuration
+AUTH_USER_MODEL = 'users.User' # <--- THE CRUCIAL ADDITION
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -141,3 +146,10 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# REST FRAMEWORK settings (optional, but common if using DRF)
+# REST_FRAMEWORK = {
+# 'DEFAULT_AUTHENTICATION_CLASSES': (
+# 'rest_framework_simplejwt.authentication.JWTAuthentication',
+# )
+# }
