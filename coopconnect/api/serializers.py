@@ -1,10 +1,7 @@
 
-from rest_framework import serializers
-from django.contrib.auth.models import User 
+from rest_framework import serializers 
 from django.contrib.auth.hashers import make_password
-
-
-from users.models import User 
+from users.models import User,USER_TYPE_CHOICES
 from trainings.models import Training
 from schedules.models import Schedule
 from rewards.models import Reward
@@ -18,36 +15,34 @@ from payment.models import Payment
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User 
-        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'is_staff', 'is_active', 'date_joined']
+        fields = ['id', 'Full name', 'email', 'is_staff', 'is_active', 'date_joined']
         read_only_fields = ['id', 'is_staff', 'is_active', 'date_joined']
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
         write_only=True,
         required=True,
-        style={'input_type': 'password'} 
+        style={'input_type': 'password'}
     )
-    email = serializers.EmailField(required=True) 
+    name = serializers.CharField(required=True, label="Full name")
+    phone_number = serializers.CharField(required=True)
+    village = serializers.PrimaryKeyRelatedField(queryset=Village.objects.all(), required=True)
+    user_type = serializers.ChoiceField(choices=USER_TYPE_CHOICES, required=True)
 
     class Meta:
         model = User
-        fields = ['username', 'password', 'email', 'first_name', 'last_name']
+        fields = ['name', 'password', 'phone_number', 'village', 'user_type']
 
-    def validate_username(self, value):
-        if User.objects.filter(username__iexact=value).exists():
-            raise serializers.ValidationError("A user with that username already exists.")
-        return value
-
-    def validate_email(self, value):
-        if User.objects.filter(email__iexact=value).exists():
-            raise serializers.ValidationError("A user with that email address already exists.")
+    def validate_phone_number(self, value):
+        if User.objects.filter(phone_number=value).exists():
+            raise serializers.ValidationError("A user with that phone number already exists.")
         return value
 
     def create(self, validated_data):
         validated_data['password'] = make_password(validated_data.get('password'))
+        validated_data['username'] = validated_data['phone_number']
         user = super().create(validated_data)
         return user
-
 
 class TrainingsSerializer(serializers.ModelSerializer):
 

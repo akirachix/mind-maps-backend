@@ -10,10 +10,8 @@ USER_TYPE_CHOICES = [
         ('Admin', 'Admin'),
     ]
 
-class User(AbstractUser): # KEY CHANGE: Inherits from AbstractUser
-        # AbstractUser provides username, email, password (hashed!), is_staff, etc.
-
-        # Your custom fields are ADDED to this User model:
+class User(AbstractUser): 
+       
         name = models.CharField(_("Name of User"), blank=True, max_length=255)
         user_type = models.CharField(
             _("User Type"),
@@ -31,5 +29,5 @@ class User(AbstractUser): # KEY CHANGE: Inherits from AbstractUser
         )
 
         def __str__(self):
-            return self.username # Or self.name if you prefer
+            return self.username 
 

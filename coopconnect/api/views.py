@@ -2,7 +2,8 @@
 
 
 from rest_framework import viewsets, permissions, generics
-
+from rest_framework.response import Response
+from rest_framework import status
 
 from refunds.models import Refund
 from trainings.models import Training
@@ -30,8 +31,16 @@ from .serializers import (
 class UserRegistrationView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserRegistrationSerializer
-    permission_classes = [permissions.AllowAny] 
+    permission_classes = [permissions.AllowAny]
 
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        return Response(
+            {"message": "User registered successfully."},
+            status=status.HTTP_201_CREATED
+        )
 
 
 class TrainingsViewSet(viewsets.ModelViewSet):
