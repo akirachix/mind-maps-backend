@@ -1,6 +1,6 @@
+# users/apps.py
 from django.apps import AppConfig
 
-
-class CooperativeadminConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'users'
+class UsersConfig(AppConfig): 
+        default_auto_field = 'django.db.models.BigAutoField'
+        name = 'users' # This should match your app's directory name
