@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings 
 from schedules.models import Schedule
 
+
 PAYMENT_STATUS_CHOICES = [
     ('PENDING', 'Pending'),
     ('COMPLETED', 'Completed'),

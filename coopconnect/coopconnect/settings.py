@@ -9,14 +9,35 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+import dj_database_url
 import os
-
-MOMOSUBSCRIPTION_KEY = os.getenv("MOMO_SUBSCRIPTION_KEY")
-MOMOAPI_USER = os.getenv("MOMO_API_USER")
-MOMOAPI_KEY = os.getenv("MOMO_API_KEY")
+from dotenv import load_dotenv
+load_dotenv()
 
 
+# settings.py
+# SECRET_KEY = os.getenv('SECRET_KEY')
+# DARAJA_CONSUMER_KEY = os.getenv("DARAJA_CONSUMER_KEY")
+# DARAJA_CONSUMER_SECRET = os.getenv("DARAJA_CONSUMER_SECRET")
+# DARAJA_SHORTCODE = os.getenv("DARAJA_SHORTCODE")
+# DARAJA_PASSKEY = os.getenv("DARAJA_PASSKEY")
+# DARAJA_ENV = os.getenv("DARAJA_ENV", "sandbox")  
+
+
+
+
+DJANGO_SECRET_KEY="django-insecure-^cz3#s_y0zhcf@qp$zc5m58-p=aaxii=4rnlq%q)!bk57imn4y"
+DARAJA_CONSUMER_KEY="cGoGTr3f2T7xzOCCLrcYAKt1HXpkyVDzaFySiOqD54c0L8AW"
+DARAJA_CONSUMER_SECRET="p5ANchgQkdTvSVDlI2tVNJZXmEOfPJHxT2V6betrcSi2RHw37T0cFNuQDZaK1nSM"
+DARAJA_SHORTCODE='174379'
+DARAJA_PASSKEY="bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919"
+DARAJA_CALLBACK_URL = 'https://1234abcd.ngrok.io/api/payments/daraja-callback/'
+
+
+
+
+
+STATIC_URL = '/static/'
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -27,13 +48,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-^cz3#s_y0zhcf@qp$zc5m58-p=aaxii=4rnlq%q)!bk57imn4y'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-^cz3#s_y0zhcf@qp$zc5m58-p=aaxii=4rnlq%q)!bk57imn4y')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -46,7 +66,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Your applications
-    'users.apps.UsersConfig', # It's good practice to use the AppConfig
+    'users.apps.UsersConfig', 
     'trainings.apps.TrainingsConfig',
     'schedules.apps.SchedulesConfig',
     'village.apps.VillageConfig',
@@ -54,7 +74,7 @@ INSTALLED_APPS = [
     'payment.apps.PaymentConfig',
     'rewards.apps.RewardsConfig',
     'refunds.apps.RefundsConfig',
-    'api.apps.ApiConfig', # Assuming api is an app with an apps.py
+    'api.apps.ApiConfig', 
 
     # Third-party apps
     'rest_framework',
@@ -62,10 +82,15 @@ INSTALLED_APPS = [
 ]
 
 # Custom User Model Configuration
-AUTH_USER_MODEL = 'users.User' # <--- THE CRUCIAL ADDITION
+AUTH_USER_MODEL = 'users.User'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = '/static/'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -73,7 +98,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
 ROOT_URLCONF = 'coopconnect.urls'
 
 TEMPLATES = [
@@ -99,10 +123,9 @@ WSGI_APPLICATION = 'coopconnect.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        default=f"sqlite:///{os.path.join(BASE_DIR, 'db.sqlite3')}"
+    )
 }
 
 
@@ -140,7 +163,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = '/static/'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

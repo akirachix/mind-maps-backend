@@ -13,7 +13,8 @@ from .views import (
     RefundViewSet,
     AttendanceViewSet,
     PaymentViewSet,
-    UserRegistrationView 
+    daraja_callback,
+ STKPushView,
 )
 
 router = DefaultRouter()
@@ -28,5 +29,6 @@ router.register(r'payment', PaymentViewSet, basename='payment')
 
 urlpatterns = [
     path("", include(router.urls)),
-    path('register/', UserRegistrationView.as_view(), name='user-register'), 
+    path('daraja/stk-push/', STKPushView.as_view(), name='daraja-stk-push'),
+    path('daraja/callback/', daraja_callback, name='daraja-callback'),
 ]
