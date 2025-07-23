@@ -11,32 +11,19 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import dj_database_url
 import os
+from pathlib import Path
 from dotenv import load_dotenv
 load_dotenv()
-
-
-# settings.py
+BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
+
+
 DARAJA_CONSUMER_KEY = os.getenv("DARAJA_CONSUMER_KEY")
 DARAJA_CONSUMER_SECRET = os.getenv("DARAJA_CONSUMER_SECRET")
 DARAJA_SHORTCODE = os.getenv("DARAJA_SHORTCODE")
 DARAJA_PASSKEY = os.getenv("DARAJA_PASSKEY")
 DARAJA_CALLBACK_URL = os.getenv("DARAJA_CALLBACK_URL")
 DARAJA_ENV = os.getenv("DARAJA_ENV", "sandbox")  
-
-
-
-
-
-
-
-
-
-STATIC_URL = '/static/'
-from pathlib import Path
-
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Quick-start development settings - unsuitable for production
@@ -46,8 +33,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-^cz3#s_y0zhcf@qp$zc5m58-p=aaxii=4rnlq%q)!bk57imn4y')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-DEBUG = os.getenv('DEBUG', 'False') == 'True'
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -60,8 +46,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    # Your applications
     'users.apps.UsersConfig', 
     'trainings.apps.TrainingsConfig',
     'schedules.apps.SchedulesConfig',
@@ -71,13 +55,11 @@ INSTALLED_APPS = [
     'rewards.apps.RewardsConfig',
     'refunds.apps.RefundsConfig',
     'api.apps.ApiConfig', 
-
-    # Third-party apps
     'rest_framework',
     'rest_framework_simplejwt',
 ]
 
-# Custom User Model Configuration
+
 AUTH_USER_MODEL = 'users.User'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
@@ -119,11 +101,15 @@ WSGI_APPLICATION = 'coopconnect.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(
-        default=f"sqlite:///{os.path.join(BASE_DIR, 'db.sqlite3')}"
-    )
+   "default": dj_database_url.config(default=os.getenv("DATABASE_URL"))
 }
-
+if not os.getenv("DATABASE_URL"):
+   DATABASES = {
+       "default": {
+           "ENGINE": "django.db.backends.sqlite3",
+           "NAME": BASE_DIR / "db.sqlite3",
+       }
+   }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -161,16 +147,13 @@ USE_TZ = True
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# REST FRAMEWORK settings (optional, but common if using DRF)
-# REST_FRAMEWORK = {
-# 'DEFAULT_AUTHENTICATION_CLASSES': (
-# 'rest_framework_simplejwt.authentication.JWTAuthentication',
-# )
-# }
