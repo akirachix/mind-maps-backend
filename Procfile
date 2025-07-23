@@ -1,1 +1,1 @@
-web: gunicorn coopconnect.wsgi --log-file-
+web: gunicorn coopconnect.wsgi --log-file -
