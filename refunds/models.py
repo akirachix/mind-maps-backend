@@ -55,7 +55,6 @@ class Refund(models.Model):
     requested_at = models.DateTimeField(auto_now_add=True)
 
     processed_at = models.DateTimeField(null=True, blank=True)
-    notes = models.TextField(blank=True, help_text="Internal notes about the refund process.")
     updated_at = models.DateTimeField(auto_now=True)
 
 

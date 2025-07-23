@@ -1,5 +1,3 @@
-
-
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
@@ -14,7 +12,7 @@ from .views import (
     AttendanceViewSet,
     PaymentViewSet,
     daraja_callback,
- STKPushView,
+    STKPushView,
 )
 
 router = DefaultRouter()

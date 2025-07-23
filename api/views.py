@@ -19,90 +19,56 @@ from .serializers import (
     RewardsSerializer,
     VillageSerializer,
     UserSerializer,
-    UserRegistrationSerializer,
     RefundSerializer,
     AttendanceSerializer,
     PaymentSerializer,
 )
-class UserRegistrationView(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserRegistrationSerializer
-    permission_classes = [permissions.AllowAny]
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.save()
-        return Response(
-            {"message": "User registered successfully."},
-            status=status.HTTP_201_CREATED,
-        )
+
 class TrainingsViewSet(viewsets.ModelViewSet):
     queryset = Training.objects.all()
     serializer_class = TrainingsSerializer
-    def get_queryset(self):
-        user = self.request.user
-        if user.is_authenticated:
-            return Training.objects.all()
-        return Training.objects.none()
-    def perform_create(self, serializer):
-        if self.request.user.is_authenticated:
-            serializer.save(created_by=self.request.user)
-        else:
-            serializer.save()
+  
 class SchedulesViewSet(viewsets.ModelViewSet):
     queryset = Schedule.objects.all()
     serializer_class = SchedulesSerializer
+    
+
 class RewardsViewSet(viewsets.ModelViewSet):
     queryset = Reward.objects.all()
     serializer_class = RewardsSerializer
+
 class VillageViewSet(viewsets.ModelViewSet):
     queryset = Village.objects.all()
     serializer_class = VillageSerializer
+
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    def get_permissions(self):
-        if self.action == "create":
-            self.permission_classes = [permissions.AllowAny]
-        elif self.action in [
-            "list",
-            "retrieve",
-            "update",
-            "partial_update",
-            "destroy",
-        ]:
-            self.permission_classes = [permissions.IsAdminUser]
-        return super().get_permissions()
+    
+    
 class RefundViewSet(viewsets.ModelViewSet):
     queryset = Refund.objects.all()
     serializer_class = RefundSerializer
-    def get_queryset(self):
-        user = self.request.user
-        if user.is_authenticated:
-            return Refund.objects.all()
-        return Refund.objects.none()
-    def perform_create(self, serializer):
-        if self.request.user.is_authenticated:
-            serializer.save(user=self.request.user)
-        else:
-            serializer.save()
+    
 class AttendanceViewSet(viewsets.ModelViewSet):
     queryset = Attendance.objects.all()
     serializer_class = AttendanceSerializer
+
 class PaymentViewSet(viewsets.ModelViewSet):
     queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
-    def get_queryset(self):
-        user = self.request.user
-        if user.is_authenticated:
-            return Payment.objects.all()
-        return Payment.objects.none()
-    def perform_create(self, serializer):
-        if self.request.user.is_authenticated:
-            serializer.save(user=self.request.user)
-        else:
-            serializer.save()
+
+     
+   
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import AllowAny
+from django.utils import timezone
+import datetime
+
 class STKPushView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [AllowAny]
+
     def post(self, request):
         serializer = STKPushSerializer(data=request.data)
         if serializer.is_valid():
@@ -115,17 +81,48 @@ class STKPushView(APIView):
                     account_reference=data["account_reference"],
                     transaction_desc=data["transaction_desc"],
                 )
+                checkout_request_id = response.get('CheckoutRequestID', None)
+                if checkout_request_id:
+                    Payment.objects.create(
+                        phone_number=data['phone_number'],
+                        amount=data['amount'],
+                        transaction_code=checkout_request_id,
+                        status='PENDING'
+                    )
                 return Response(response, status=status.HTTP_200_OK)
             except Exception as e:
-                # Return the error details for debugging
                 return Response(
                     {"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
                 )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-@api_view(["POST"])
+
+@api_view(['POST'])
 def daraja_callback(request):
-    print("Daraja Callback Data:", request.data)
-    return Response({"ResultCode": 0, "ResultDesc": "Accepted"})
+    callback_data = request.data
+    print("Daraja Callback Data:", callback_data)
+    try:
+        stk_callback = callback_data['Body']['stkCallback']
+        checkout_request_id = stk_callback['CheckoutRequestID']
+        result_code = stk_callback['ResultCode']
+        result_desc = stk_callback['ResultDesc']
+        payment = Payment.objects.get(transaction_code=checkout_request_id)
+        payment.status = 'COMPLETED' if result_code == 0 else 'FAILED'
+        payment.result_description = result_desc
+        if result_code == 0:
+            items = stk_callback.get('CallbackMetadata', {}).get('Item', [])
+            item_dict = {item['Name']: item['Value'] for item in items}
+            payment.mpesa_receipt_number = item_dict.get('MpesaReceiptNumber')
+            trans_date_str = str(item_dict.get('TransactionDate'))
+            trans_date = datetime.datetime.strptime(trans_date_str, '%Y%m%d%H%M%S')
+            payment.transaction_date = timezone.make_aware(trans_date, timezone.get_current_timezone())
+            payment.amount = item_dict.get('Amount')
+            payment.phone_number = item_dict.get('PhoneNumber')
+        payment.save()
+    except Payment.DoesNotExist:
+        print(f"Payment with CheckoutRequestID {checkout_request_id} not found.")
+    except Exception as e:
+        print(f"Error processing Daraja callback: {e}")
+    return
 
 
 
