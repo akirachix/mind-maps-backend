@@ -1,5 +1,8 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
+from .views import RegisterView
+from .views import LoginView
+from rest_framework.authtoken.views import obtain_auth_token
 
 
 from .views import (
@@ -29,4 +32,6 @@ urlpatterns = [
     path("", include(router.urls)),
     path('daraja/stk-push/', STKPushView.as_view(), name='daraja-stk-push'),
     path('daraja/callback/', daraja_callback, name='daraja-callback'),
+    path('register/', RegisterView.as_view({'post': 'create'}), name='register'),
+    path('login/', LoginView.as_view({'post': 'create'}), name='login'),
 ]

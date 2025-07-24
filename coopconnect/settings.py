@@ -57,8 +57,15 @@ INSTALLED_APPS = [
     'api.apps.ApiConfig', 
     'rest_framework',
     'rest_framework_simplejwt',
+    'rest_framework.authtoken',
+    'corsheaders',
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ]
+}
 
 AUTH_USER_MODEL = 'users.User'
 
@@ -75,8 +82,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+     'corsheaders.middleware.CorsMiddleware',
 ]
 ROOT_URLCONF = 'coopconnect.urls'
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 TEMPLATES = [
     {
@@ -156,4 +166,10 @@ STATICFILES_DIRS = (
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+AUTHENTICATION_BACKENDS = [
+    'users.authentication.Auth',
+    'django.contrib.auth.backends.ModelBackend',  
+]
 
