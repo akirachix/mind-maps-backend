@@ -11,6 +11,13 @@ from schedules.models import Schedule
 from village.models import Village
 from payment.models import Payment
 from attendance.models import Attendance
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import AllowAny
+from django.utils import timezone
+import datetime
+from rest_framework.authtoken.models import Token
+
+
 from .daraja import DarajaAPI
 from .serializers import (
     STKPushSerializer,
@@ -33,6 +40,36 @@ class SchedulesViewSet(viewsets.ModelViewSet):
     serializer_class = SchedulesSerializer
     
 
+class RegisterView(viewsets.ViewSet):
+    permission_classes = []
+
+    def create(self, request):
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            return Response({
+                "user": UserSerializer(user).data
+            }, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class LoginView(viewsets.ViewSet):
+    permission_classes = []
+
+    def create(self, request):
+        phone_number = request.data.get('phone_number')
+        password = request.data.get('password')
+        print("Login attempt:", phone_number)
+        if not phone_number or not password:
+         return Response({'detail': 'Phone number and password are required.'}, status=status.HTTP_400_BAD_REQUEST)
+        user = User.objects.filter(phone_number=phone_number).first()
+        print("User found:", user)
+        if user and user.check_password(password):
+         token, created = Token.objects.get_or_create(user=user)
+         print("Token:", token.key)
+         return Response({'token': token.key})
+        print("Invalid credentials")
+        return Response({'detail': 'Invalid credentials'}, status=status.HTTP_400_BAD_REQUEST)  
+
 class RewardsViewSet(viewsets.ModelViewSet):
     queryset = Reward.objects.all()
     serializer_class = RewardsSerializer
@@ -43,7 +80,7 @@ class VillageViewSet(viewsets.ModelViewSet):
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = UserSerializer 
     
     
 class RefundViewSet(viewsets.ModelViewSet):
@@ -58,12 +95,6 @@ class PaymentViewSet(viewsets.ModelViewSet):
     queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
 
-     
-   
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import AllowAny
-from django.utils import timezone
-import datetime
 
 class STKPushView(APIView):
     authentication_classes = [TokenAuthentication]

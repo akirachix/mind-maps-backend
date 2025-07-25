@@ -15,21 +15,27 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
-            'id', 'username', 'name', 'email', 'password',
+            'id', 'name', 'password',
             'phone_number', 'village', 'user_type',
             'is_staff', 'is_active', 'date_joined'
         ]
         read_only_fields = ['id', 'username', 'is_staff', 'is_active', 'date_joined']
 
+    def validate(self, attrs):
+        username = attrs.get('phone_number')
+        if User.objects.filter(username=username).exists():
+            raise serializers.ValidationError({'phone_number': 'A user with this phone number already exists.'})
+        return attrs
+
     def create(self, validated_data):
         password = validated_data.pop('password', None)
-        if 'username' not in validated_data or not validated_data['username']:
-            validated_data['username'] = validated_data.get('phone_number')
+        validated_data['username'] = validated_data.get('phone_number')
         user = User(**validated_data)
         if password:
             user.set_password(password)
         user.save()
         return user
+
 
 class TrainingsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -65,7 +71,7 @@ class AttendanceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attendance
         fields = '__all__'
-        read_only_fields = ['id', 'farmer', 'schedule', 'created_at', 'updated_at', 'attended_at']
+        read_only_fields = ['id', 'created_at', 'updated_at', 'attended_at']
 
 class PaymentSerializer(serializers.ModelSerializer):
     class Meta:
