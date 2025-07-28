@@ -16,9 +16,8 @@ from rest_framework.permissions import AllowAny
 from django.utils import timezone
 import datetime
 from rest_framework.authtoken.models import Token
-
-
 from .daraja import DarajaAPI
+
 from .serializers import (
     STKPushSerializer,
     TrainingsSerializer,
@@ -30,14 +29,25 @@ from .serializers import (
     AttendanceSerializer,
     PaymentSerializer,
 )
+from users.permissions import (
+    TrainingsPermission,
+    RewardsPermission,
+    VillagePermission,
+    RefundPermission,
+    AttendancePermission,
+    PaymentPermission,
+    SchedulePermission,
+)
 
 class TrainingsViewSet(viewsets.ModelViewSet):
     queryset = Training.objects.all()
     serializer_class = TrainingsSerializer
+    permission_classes = [TrainingsPermission]
   
 class SchedulesViewSet(viewsets.ModelViewSet):
     queryset = Schedule.objects.all()
     serializer_class = SchedulesSerializer
+    permission_classes = [SchedulePermission]
     
 
 class RegisterView(viewsets.ViewSet):
@@ -73,10 +83,12 @@ class LoginView(viewsets.ViewSet):
 class RewardsViewSet(viewsets.ModelViewSet):
     queryset = Reward.objects.all()
     serializer_class = RewardsSerializer
+    permission_classes = [RewardsPermission]
 
 class VillageViewSet(viewsets.ModelViewSet):
     queryset = Village.objects.all()
     serializer_class = VillageSerializer
+    permission_classes = [VillagePermission]
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -86,14 +98,17 @@ class UserViewSet(viewsets.ModelViewSet):
 class RefundViewSet(viewsets.ModelViewSet):
     queryset = Refund.objects.all()
     serializer_class = RefundSerializer
+    permission_classes = [RefundPermission]
     
 class AttendanceViewSet(viewsets.ModelViewSet):
     queryset = Attendance.objects.all()
     serializer_class = AttendanceSerializer
+    permission_classes = [AttendancePermission]
 
 class PaymentViewSet(viewsets.ModelViewSet):
     queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
+    permission_classes = [PaymentPermission]
 
 
 class STKPushView(APIView):
