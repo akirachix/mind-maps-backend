@@ -19,17 +19,19 @@ class UserSerializer(serializers.ModelSerializer):
             'phone_number', 'village', 'user_type',
             'is_staff', 'is_active', 'date_joined'
         ]
-        read_only_fields = ['id', 'username', 'is_staff', 'is_active', 'date_joined']
+        read_only_fields = ['id', 'is_staff', 'is_active', 'date_joined']
 
     def validate(self, attrs):
-        username = attrs.get('phone_number')
-        if User.objects.filter(username=username).exists():
+        if attrs.get('user_type', '').lower() == 'admin':
+            raise serializers.ValidationError({'user_type': 'You cannot register as admin.'})
+
+        phone_number = attrs.get('phone_number')
+        if User.objects.filter(phone_number=phone_number).exists():
             raise serializers.ValidationError({'phone_number': 'A user with this phone number already exists.'})
         return attrs
 
     def create(self, validated_data):
         password = validated_data.pop('password', None)
-        validated_data['username'] = validated_data.get('phone_number')
         user = User(**validated_data)
         if password:
             user.set_password(password)
